@@ -86,11 +86,11 @@
                     this.toggleClass("displayed", false, this.$.error);
                     this.toggleClass("floated", true, this.$.label);
                     for (var i = 0; i < items.length; i++) {
-                        if (typeof items[i].value != "undefined" && items[i].value == this.selected) {
+                        if (typeof items[i].value != "undefined" && items[i].value.toString() == this.selected) {
                             this.$.value.innerText = items[i].innerText;
                             break; 
                         }
-                        if (typeof items[i].attributes["value"] != "undefined" && items[i].attributes["value"].value == this.selected) {
+                        if (typeof items[i].attributes["value"] != "undefined" && items[i].attributes["value"].value.toString() == this.selected) {
                             this.$.value.innerText = items[i].innerText;
                             break;
                         }
