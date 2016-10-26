@@ -75,7 +75,8 @@
             },
             selectedChange: function () {
                 var items = this.$.selector.items;
-                if(typeof this.selected == "undefined" || this.selected == null || this.selected == "") {
+
+                if(this.selected == undefined || this.selected == null || this.selected === "") {
                     this.toggleClass("invalid", false, this.$.text);
                     this.toggleClass("displayed", false, this.$.error);
                     this.toggleClass("floated", false, this.$.label);
@@ -86,11 +87,11 @@
                     this.toggleClass("displayed", false, this.$.error);
                     this.toggleClass("floated", true, this.$.label);
                     for (var i = 0; i < items.length; i++) {
-                        if (typeof items[i].value != "undefined" && items[i].value.toString() == this.selected) {
+                        if (items[i].value != undefined && items[i].value == this.selected.toString()) {
                             this.$.value.innerText = items[i].innerText;
                             break; 
                         }
-                        if (typeof items[i].attributes["value"] != "undefined" && items[i].attributes["value"].value.toString() == this.selected) {
+                        if (items[i].attributes["value"] != undefined && items[i].attributes["value"].value == this.selected.toString()) {
                             this.$.value.innerText = items[i].innerText;
                             break;
                         }
