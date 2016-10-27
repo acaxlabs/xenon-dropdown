@@ -1,3 +1,20 @@
+<!--
+
+`<xenon-dropdown>` provides a simple dropdown list. Simply wrap your content with the `<xenon-dropdown>` component.
+
+Example:
+
+           `<xenon-dropdown label="Payment Method" selected="{{app.paymentMethod.paymentType}}">
+                <div value="CreditCard">Credit Card</div>
+                <div value="BankDraft">Bank Draft</div>
+            </xenon-dropdown>`
+
+@group Xenon Elements
+@element xenon-dropdown
+@demo demo/index.html
+-->
+
+
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-dropdown/iron-dropdown.html"/>
 <link rel="import" href="../iron-selector/iron-selector.html"/>
@@ -41,19 +58,26 @@
         Polymer({
             is: "xenon-dropdown",
             properties: {
+                /* Binds the selected items value to a local property. */
                 selected: { type: Object, notify: true, bindToAttribute: true, observer: "selectedChange" },
+                /* Number of items in the list. */
                 index: { type: Number, observer: "indexChange" },
+                /* Gives the dropdown list a lable. */
                 label: { type: String, notify: true, reflectToAttribute: true },
+                /* Sets the list to be required. */
                 required: { type: Boolean, value: false },
+                /* Displays a message to the message. */
                 errorMessage: String
             },
             behaviors: [
               Polymer.IronValidatableBehavior,
               Polymer.IronFormElementBehavior
             ],
+            /* Opens the list */
             open: function () {
                 this.$.dropdown.open();
             },
+            /* Validate is called if the reqired attribute is set. */
             validate: function () {
                 if (!this.required || this.selected) {
                     return true;
@@ -63,6 +87,7 @@
                     return false;
                 }
             },
+            /* Keeps track of the index of the list. */
             indexChange: function (index) {
                 var e = this.$.selector.items[index];
                 this.$.dropdown.close();
@@ -73,6 +98,7 @@
                         this.set("selected", e.attributes["value"].value);
                 }
             },
+            /* Updates the selected item. */
             selectedChange: function () {
                 var items = this.$.selector.items;
 
