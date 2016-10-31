@@ -2,9 +2,9 @@
   "name": "xenon-dropdown",
   "version": "1.0.0",
   "authors": [
-    "Matt Bruce <matt.bruce@acaexpress.com>"
+    "ACA[X]Labs"
   ],
-  "description": "",
+  "description": "Dropdown that allows pre-selection",
   "main": "xenon-dropdown.html",
   "license": "MIT",
   "homepage": "https://github.com/acaxlabs/xenon-dropdown.git",
