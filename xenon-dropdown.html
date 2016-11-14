@@ -13,37 +13,31 @@ Example:
 @element xenon-dropdown
 @demo demo/index.html
 -->
-
-
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-dropdown/iron-dropdown.html"/>
 <link rel="import" href="../iron-selector/iron-selector.html"/>
-<link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../iron-icons/iron-icons.html"/>
+<link rel="import" href="../iron-icon/iron-icon.html"/>
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html"/>
-<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html"/>
+<link rel="import" href="../paper-input/paper-input.html"/>
 
 <dom-module is="xenon-dropdown">
     <template>
         <style>
             #dropdown { background-color:white; box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25); }
+            #input { margin-bottom: 12px; }
             iron-selector > ::content div { cursor:pointer; padding:5px; min-width:250px;  }
             iron-selector > ::content div:hover { background-color: gainsboro; }
-            #text { border-bottom: solid 1px #555; color: #333; font-size:11pt; height:1.6em; text-wrap:none; overflow:hidden; }
-            #text.invalid { border-bottom: solid 2px #ff6767; }
-            div.floating-label { color:#888; transition: all 0.3s; transform: translateY(100%); font-size:11pt; }
-            div.floating-label.floated { transition: all 0.3s; transform-origin: top left; transform: translateY(0%) scale(0.85, 0.85); }
-            #error { font-size:9pt; color:#d53939; display:none; }
-            #error.displayed { display: block; }
             iron-icon { float: right; color:#aaa; }
             .wrap { padding-top: 10px; }
         </style>
-        <div class="wrap">
-            <div id="label" class="floating-label" on-tap="open">{{label}}</div>
-            <div id="text" on-tap="open"><iron-icon icon="icons:arrow-drop-down"></iron-icon><span id="value">&nbsp;</span></div>
-            <div id="error">{{errorMessage}}</div>
-            <iron-dropdown id="dropdown" allow-outside-scroll="true" vertical-offset="50">
+
+        <div>
+        <paper-input on-tap="open" id="input" value="{{_text}}" allowed-pattern="[]" prevent-invalid-input label="{{label}}" required$="{{required}}" error-message="{{errorMessage}}">
+            <iron-icon icon="arrow-drop-down" suffix></iron-icon>
+        </paper-input>
+        <iron-dropdown id="dropdown" allow-outside-scroll="true" vertical-offset="54">
                 <div class="dropdown-content">
                     <div class="wrapper">
                         <iron-selector id="selector" on-iron-items-changed="selectedChange" selected="{{index}}">
@@ -60,32 +54,31 @@ Example:
             properties: {
                 /* Binds the selected items value to a local property. */
                 selected: { type: Object, notify: true, bindToAttribute: true, observer: "selectedChange" },
-                /* Number of items in the list. */
+                /* index of selected item in the list. */
                 index: { type: Number, observer: "indexChange" },
                 /* Gives the dropdown list a lable. */
                 label: { type: String, notify: true, reflectToAttribute: true },
                 /* Sets the list to be required. */
                 required: { type: Boolean, value: false },
                 /* Displays a message to the message. */
-                errorMessage: String
+                errorMessage: String, 
+                /* Output value */
+                _text: String
             },
             behaviors: [
               Polymer.IronValidatableBehavior,
               Polymer.IronFormElementBehavior
             ],
+            ready: function() {
+                this.$.input.addOwnKeyBinding();
+            },
             /* Opens the list */
             open: function () {
                 this.$.dropdown.open();
             },
             /* Validate is called if the reqired attribute is set. */
             validate: function () {
-                if (!this.required || this.selected) {
-                    return true;
-                } else {
-                    this.toggleClass("invalid", true, this.$.text);
-                    this.toggleClass("displayed", true, this.$.error);
-                    return false;
-                }
+                this.$.input.validate();
             },
             /* Keeps track of the index of the list. */
             indexChange: function (index) {
@@ -101,24 +94,17 @@ Example:
             /* Updates the selected item. */
             selectedChange: function () {
                 var items = this.$.selector.items;
-
                 if(this.selected == undefined || this.selected == null || this.selected === "") {
-                    this.toggleClass("invalid", false, this.$.text);
-                    this.toggleClass("displayed", false, this.$.error);
-                    this.toggleClass("floated", false, this.$.label);
-                    this.$.value.innerText = "";
+                    this._text = "";
                     this.index = -1;
                 } else {
-                    this.toggleClass("invalid", false, this.$.text);
-                    this.toggleClass("displayed", false, this.$.error);
-                    this.toggleClass("floated", true, this.$.label);
                     for (var i = 0; i < items.length; i++) {
                         if (items[i].value != undefined && items[i].value == this.selected.toString()) {
-                            this.$.value.innerText = items[i].innerText;
+                            this._text = items[i].innerText;
                             break; 
                         }
                         if (items[i].attributes["value"] != undefined && items[i].attributes["value"].value == this.selected.toString()) {
-                            this.$.value.innerText = items[i].innerText;
+                            this._text = items[i].innerText;
                             break;
                         }
                     }

@@ -1,9 +1,9 @@
 <link rel="import" href="../../polymer/polymer.html"/>
 <link rel="import" href="../xenon-dropdown.html" />
+<link rel="import" href="../../iron-form/iron-form.html" />
 <link rel="import" href="demo-people-service.html" />
 <dom-module id="dropdown-demo">
     <template>
-
         <style>
             .section { margin-bottom:40px; }
         </style>
@@ -25,10 +25,10 @@
         </div>
 
         <div class="section">
-            <xenon-dropdown id="test" label="This One Is Preselected" selected="Third">
+            <xenon-dropdown id="test" label="This One Is Preselected" selected="3">
                 <div value="1">First</div>
                 <div value="2">Second</div>
-                <div value="Third">3</div>
+                <div value="3">Third</div>
             </xenon-dropdown>
         </div>
 
@@ -40,6 +40,17 @@
             </xenon-dropdown>
             <button on-click="setthird">Third</button>
             <button on-click="setnone">none</button>
+        </div>
+
+        <div class="section">
+            <form id="validatable" is="iron-form">
+            <xenon-dropdown label="Validate Me" required error-message="please choose something">
+                <div value="1">First</div>
+                <div value="2">Second</div>
+                <div value="3">Third</div>
+            </xenon-dropdown>
+            <button on-click="validate">Validate</button>
+            </form>
         </div>
     </template>
     <script>
@@ -57,6 +68,10 @@
             },
             setnone: function () {
                 this.setselection = null;
+            }, 
+            validate: function(e) {
+                e.preventDefault();
+                this.$.validatable.validate();
             }
         });
     </script>
