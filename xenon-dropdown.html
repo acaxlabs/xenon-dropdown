@@ -74,11 +74,11 @@ Example:
             },
             /* Opens the list */
             open: function () {
-                return this.$.dropdown.open();
+                this.$.dropdown.open();
             },
             /* Validate is called if the reqired attribute is set. */
             validate: function () {
-                this.$.input.validate();
+                return this.$.input.validate();
             },
             /* Keeps track of the index of the list. */
             indexChange: function (index) {
