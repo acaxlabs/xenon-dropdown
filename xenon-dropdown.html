@@ -34,7 +34,7 @@ Example:
         </style>
 
         <div>
-        <paper-input on-tap="open" id="input" value="{{_text}}" allowed-pattern="[]" prevent-invalid-input label="{{label}}" required$="{{required}}" error-message="{{errorMessage}}">
+        <paper-input on-tap="open" id="input" value="{{_text}}" allowed-pattern="[[allowedPattern]]" prevent-invalid-input label="{{label}}" required$="{{required}}" error-message="{{errorMessage}}">
             <iron-icon icon="arrow-drop-down" suffix></iron-icon>
         </paper-input>
         <iron-dropdown id="dropdown" allow-outside-scroll="true" vertical-offset="54">
@@ -63,7 +63,9 @@ Example:
                 /* Displays a message to the message. */
                 errorMessage: String, 
                 /* Output value */
-                _text: String
+                _text: { type: String, notify: true },
+                /*  */
+                allowedPattern: { type: String, notify: true, reflectToAttribute: true, value:"[]" },
             },
             behaviors: [
               Polymer.IronValidatableBehavior,
