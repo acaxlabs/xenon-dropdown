@@ -14,7 +14,7 @@
     "iron-selector": "PolymerElements/iron-selector",
     "iron-icons": "PolymerElements/iron-icons",
     "iron-icon": "PolymerElements/iron-icon",
-    "paper-ripple": "PolymerElements/paper-input",
+    "paper-input": "PolymerElements/paper-input",
     "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior",
     "iron-form-element-behavior": "PolymerElements/iron-form-element-behavior"
   },
