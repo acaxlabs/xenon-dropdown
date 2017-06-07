@@ -101,7 +101,7 @@ Example:
                     this.index = -1;
                 } else {
                     for (var i = 0; i < items.length; i++) {
-                        if (items[i].value != undefined && items[i].value == this.selected.toString()) {
+                        if (items[i].value != undefined && JSON.stringify(items[i].value) == JSON.stringify(this.selected)) {
                             this._text = items[i].innerText;
                             break; 
                         }
