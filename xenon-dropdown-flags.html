@@ -65,10 +65,14 @@ Example:
                 errorMessage: String, 
                 /*  */
                 allowedPattern: { type: String, notify: true, reflectToAttribute: true, value:"[]" },
+                _items: { type:Array }
             },
             behaviors: [
               Polymer.IronValidatableBehavior,
               Polymer.IronFormElementBehavior
+            ],
+            observers: [
+                "_setSelections(_items, flag, selected)"
             ],
             ready: function() {
                 this.$.input.addOwnKeyBinding();
@@ -89,15 +93,17 @@ Example:
                 this._text = e.innerText;
                 this.$.dropdown.close();
             },
-            _ironItemsChanged: function(e) {
-                var items = this.$.selector.items;
-                var hasFlag = ((this.selected & this.flag) == this.flag) ? "true" : "false";
+            _setSelections: function(items, flag, selected) {
+                var hasFlag = ((selected & flag) == flag) ? "true" : "false";
                 for(i = 0; i < items.length; i++) {
                     if(items[i].getAttribute("value") == hasFlag) { 
                         this.index = i;
                         this._text = items[i].innerText;
                     }; 
                 } 
+            },
+            _ironItemsChanged: function(e) {
+                this._items = this.$.selector.items;
             }
         });
     </script>
