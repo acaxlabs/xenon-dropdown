@@ -26,20 +26,20 @@ Example:
     <template>
         <style>
             #dropdown { background-color:white; box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.25); }
+            #input { margin-bottom: 12px; }
             iron-selector > ::content div { cursor:pointer; padding:5px; min-width:250px;  }
             iron-selector > ::content div:hover { background-color: gainsboro; }
             iron-icon { float: right; color:#aaa; }
             .wrap { padding-top: 10px; }
         </style>
-
         <div>
-        <paper-input on-tap="open" id="input" value="{{_text}}" autocomplete="none" allowed-pattern="[[allowedPattern]]" prevent-invalid-input label="{{label}}" required$="{{required}}" error-message="{{errorMessage}}">
+        <paper-input on-tap="open" id="input" value="{{_text}}" autocomplete="none" allowed-pattern="[[allowedPattern]]" prevent-invalid-input label="{{label}}" required$="{{required}}" error-message="{{errorMessage}}" on-keydown="_onKeyDown">
             <iron-icon icon="arrow-drop-down" suffix></iron-icon>
         </paper-input>
         <iron-dropdown id="dropdown" allow-outside-scroll="true" vertical-offset="54">
                 <div class="dropdown-content">
                     <div class="wrapper">
-                        <iron-selector id="selector" on-iron-items-changed="selectedChange" selected="{{index}}">
+                        <iron-selector id="selector" on-iron-items-changed="_selectedChange" selected="{{index}}">
                             <content></content>
                         </iron-selector>
                     </div>
@@ -52,9 +52,9 @@ Example:
             is: "xenon-dropdown",
             properties: {
                 /* Binds the selected items value to a local property. */
-                selected: { type: Object, notify: true, bindToAttribute: true, observer: "selectedChange" },
+                selected: { type: Object, notify: true, bindToAttribute: true, observer: "_selectedChange" },
                 /* index of selected item in the list. */
-                index: { type: Number, observer: "indexChange" },
+                index: { type: Number, observer: "_indexChange" },
                 /* Gives the dropdown list a lable. */
                 label: { type: String, notify: true, reflectToAttribute: true },
                 /* Sets the list to be required. */
@@ -82,7 +82,7 @@ Example:
                 return this.$.input.validate();
             },
             /* Keeps track of the index of the list. */
-            indexChange: function (index) {
+            _indexChange: function (index) {
                 var e = this.$.selector.items[index];
                 this.$.dropdown.close();
                 if (typeof e != "undefined") {
@@ -93,7 +93,7 @@ Example:
                 }
             },
             /* Updates the selected item. */
-            selectedChange: function () {
+            _selectedChange: function () {
                 var items = this.$.selector.items;
                 if(this.selected == undefined || this.selected == null || this.selected === "") {
                     this._text = "";
@@ -110,6 +110,61 @@ Example:
                         }
                     }
                 }
+            },
+            /* capture key events for up/dn etc */
+            _onKeyDown: function(e) {
+                switch(e.keyCode) {
+                    case 37: //left
+                    this._onPrev();
+                    break;
+                    case 38: // up
+                    this._onPrev();
+                    break;
+                    case 39: // right
+                    this._onNext();
+                    break;
+                    case 40:  // down
+                    this._onNext();
+                    break;
+                    default:
+                    this._seek(e.key);
+                    break;
+                }
+            },
+            /* select the next item in the list */
+            _onNext: function() {
+                var items = this.$.selector.items;
+                var i = this.index + 1;
+                if(i >= items.length) i=0;
+                this.index = i;
+            },
+            /* select the first item in the list */
+            _onPrev: function() {
+                var items = this.$.selector.items;
+                var i = this.index - 1;
+                if(i == -1) i=items.length-1;
+                this.index = i;
+            },
+            /* select the first item starting with the pressed character */
+            _seek: function (letter) {
+                var items = this.$.selector.items;
+                if(items.length < 1) return; 
+                var idx = this.index == undefined ? -1 : this.index; 
+                // seek from the index point down
+                for(var i = idx + 1; i < items.length; i++) {
+                    if(items[i].innerText.toLowerCase()[0] == letter.toLowerCase()) {
+                        this.index = i;
+                        return; 
+                    }
+                }
+                // then seek from the top to the index point
+                for(var i = 0; i < idx; i++) {
+                    if(items[i].innerText.toLowerCase()[0] == letter.toLowerCase()) {
+                        this.index = i;
+                        return; 
+                    }
+                }
+
             }
         });
     </script>
