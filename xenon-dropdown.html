@@ -38,7 +38,7 @@ Example:
         <iron-dropdown disabled="[[disabled]]" id="dropdown" allow-outside-scroll="true" vertical-offset="54">
                 <div class="dropdown-content">
                     <div class="wrapper">
-                        <iron-selector id="selector" on-iron-items-changed="_selectedChange" selected="{{index}}">
+                        <iron-selector id="selector" disabled="[[disabled]]" on-iron-items-changed="_selectedChange" selected="{{index}}">
                             <content></content>
                         </iron-selector>
                     </div>
